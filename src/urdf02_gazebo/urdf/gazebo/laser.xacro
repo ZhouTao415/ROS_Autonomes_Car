@@ -1,0 +1,44 @@
+<robot name="my_sensors" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- 雷达 -->
+  <!-- 下面的名字laser是和demo07 laser ..里的laser杆件相互关联的 line57-->
+  <gazebo reference="laser">
+    <sensor type="ray" name="rplidar">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>5.5</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+          <!-- 采样个数，旋转一周采样360个 -->
+            <samples>360</samples>
+            <!-- 分辨率 每一个射线是测距的 -->
+            <resolution>1</resolution>
+            <!-- 设置采样范围 -->
+            <min_angle>-3</min_angle>
+            <max_angle>3</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <!-- 精度，最多精确到0.01 -->
+          <resolution>0.01</resolution>
+        </range>
+        <!-- 高斯噪音 rviz 里面红点波动通过这个实现的，因为每次测距不一定就是个10m，可能10.01， 9，99，其为了模拟误差 -->
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_rplidar" filename="libgazebo_ros_laser.so">
+      <!-- laser sensor 要发布消息，发布方发布需要话题，话题就是scan -->
+        <topicName>/scan</topicName>
+        <!-- 下面的名字laser是和demo07 laser ..里的laser杆件相互关联的 line57-->
+        <frameName>laser</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>
